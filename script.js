@@ -16,7 +16,7 @@ const countries = {
         ]
     },
     'neighborhood': {
-        name: 'מקומות בשכונה',
+        name: 'מדינות בשכונה',
         cities: [
             { name: 'עזה', value: 'gaza', lat: 31.5017, lon: 34.4668 },
             { name: 'צור', value: 'tyre', lat: 33.2704, lon: 35.2037 },
@@ -56,20 +56,22 @@ const countries = {
 
 async function getWeather() {
     console.log("getWeather function called");
+    const countrySelect = document.getElementById('country-select');
     const citySelect = document.getElementById('city-select');
     const weatherDataDiv = document.getElementById('weather-data');
+    const country = countrySelect.value;
     const city = citySelect.value;
 
-    if (!city) {
-        weatherDataDiv.innerHTML = 'אנא בחר עיר';
+    if (!country || !city) {
+        weatherDataDiv.innerHTML = 'אנא בחר מדינה ועיר';
         return;
     }
 
     weatherDataDiv.innerHTML = 'טוען נתונים...';
 
     try {
-        const coordinates = getCityCoordinates(city);
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,pressure_msl,windspeed_10m,winddirection_10m,uv_index,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=IST&lang=he&forecast_days=6`;
+        const coordinates = getCityCoordinates(country, city);
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,pressure_msl,windspeed_10m,winddirection_10m,uv_index,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=auto&lang=he&forecast_days=6`;
         console.log("Fetching from URL:", url);
         
         const response = await fetch(url);
@@ -97,7 +99,7 @@ async function getWeather() {
             }
             weatherDataDiv.innerHTML = `
                 <div class="weather-icon animated">${weatherIcon}</div>
-                <h2>${getCityHebrewName(city)}</h2>
+                <h2>${getCityHebrewName(country, city)}</h2>
                 <p>מזג אוויר: ${getWeatherDescription(data.current_weather.weathercode)}</p>
                 <p>טמפרטורה: ${data.current_weather.temperature}°C</p>
                 <p>טמפרטורה מקסימלית: ${data.daily.temperature_2m_max[0]}°C</p>
@@ -122,24 +124,17 @@ async function getWeather() {
     }
 }
 
-function getCityCoordinates(city) {
-    for (const country of Object.values(countries)) {
-        const foundCity = country.cities.find(c => c.value === city);
-        if (foundCity) {
-            return { lat: foundCity.lat, lon: foundCity.lon };
-        }
+function getCityCoordinates(country, cityValue) {
+    const cityData = countries[country].cities.find(c => c.value === cityValue);
+    if (cityData) {
+        return { lat: cityData.lat, lon: cityData.lon };
     }
     throw new Error('City not found');
 }
 
-function getCityHebrewName(cityValue) {
-    for (const country of Object.values(countries)) {
-        const foundCity = country.cities.find(c => c.value === cityValue);
-        if (foundCity) {
-            return foundCity.name;
-        }
-    }
-    return cityValue;
+function getCityHebrewName(country, cityValue) {
+    const cityData = countries[country].cities.find(c => c.value === cityValue);
+    return cityData ? cityData.name : cityValue;
 }
 
 // ... שאר הפונקציות נשארות ללא שינוי ...
