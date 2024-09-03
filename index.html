@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>תחזית מזג אוויר בישראל</title>
+    <title>תחזית מזג אוויר עולמית</title>
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>תחזית מזג אוויר עולמית</h1>
+        <h1>תחזית מזג אוויר</h1>
         <select id="country-select">
             <option value="israel">ישראל</option>
             <option value="neighborhood">מדינות בשכונה</option>
             <option value="europe">אירופה</option>
             <option value="usa">ארצות הברית</option>
         </select>
-        <div id="cities-container"></div>
+        <select id="city-select">
+            <option value="">בחר עיר</option>
+        </select>
         <button onclick="getWeather()">הצג מזג אוויר</button>
         <div id="weather-data"></div>
     </div>
