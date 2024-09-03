@@ -54,6 +54,31 @@ const countries = {
     }
 };
 
+document.addEventListener('DOMContentLoaded', function() {
+    const countrySelect = document.getElementById('country-select');
+    const citySelect = document.getElementById('city-select');
+
+    countrySelect.addEventListener('change', updateCities);
+    updateCities(); // קריאה ראשונית לעדכון רשימת הערים
+
+    function updateCities() {
+        const selectedCountry = countrySelect.value;
+        citySelect.innerHTML = '<option value="">בחר עיר</option>';
+        
+        if (selectedCountry && countries[selectedCountry]) {
+            countries[selectedCountry].cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city.value;
+                option.textContent = city.name;
+                citySelect.appendChild(option);
+            });
+        }
+    }
+
+    // הוספת מאזין אירועים לכפתור
+    document.querySelector('button').addEventListener('click', getWeather);
+});
+
 async function getWeather() {
     console.log("getWeather function called");
     const countrySelect = document.getElementById('country-select');
@@ -61,6 +86,9 @@ async function getWeather() {
     const weatherDataDiv = document.getElementById('weather-data');
     const country = countrySelect.value;
     const city = citySelect.value;
+
+    console.log("Selected country:", country);
+    console.log("Selected city:", city);
 
     if (!country || !city) {
         weatherDataDiv.innerHTML = 'אנא בחר מדינה ועיר';
@@ -71,6 +99,7 @@ async function getWeather() {
 
     try {
         const coordinates = getCityCoordinates(country, city);
+        console.log("Coordinates:", coordinates);
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.lat}&longitude=${coordinates.lon}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,pressure_msl,windspeed_10m,winddirection_10m,uv_index,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=auto&lang=he&forecast_days=6`;
         console.log("Fetching from URL:", url);
         
@@ -125,6 +154,7 @@ async function getWeather() {
 }
 
 function getCityCoordinates(country, cityValue) {
+    console.log("Getting coordinates for country:", country, "city:", cityValue);
     const cityData = countries[country].cities.find(c => c.value === cityValue);
     if (cityData) {
         return { lat: cityData.lat, lon: cityData.lon };
@@ -138,25 +168,3 @@ function getCityHebrewName(country, cityValue) {
 }
 
 // ... שאר הפונקציות נשארות ללא שינוי ...
-
-document.addEventListener('DOMContentLoaded', function() {
-    const countrySelect = document.getElementById('country-select');
-    const citySelect = document.getElementById('city-select');
-
-    countrySelect.addEventListener('change', updateCities);
-    updateCities(); // קריאה ראשונית לעדכון רשימת הערים
-
-    function updateCities() {
-        const selectedCountry = countrySelect.value;
-        citySelect.innerHTML = '<option value="">בחר עיר</option>';
-        
-        if (selectedCountry && countries[selectedCountry]) {
-            countries[selectedCountry].cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city.value;
-                option.textContent = city.name;
-                citySelect.appendChild(option);
-            });
-        }
-    }
-});
