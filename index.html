@@ -10,15 +10,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>תחזית מזג אוויר</h1>
-        <select id="city-select">
-            <option value="">בחר עיר</option>
-            <option value="tel-aviv">תל אביב</option>
-            <option value="jerusalem">ירושלים</option>
-            <option value="haifa">חיפה</option>
-            <option value="beer-sheva">באר שבע</option>
-            <option value="eilat">אילת</option>
+        <h1>תחזית מזג אוויר עולמית</h1>
+        <select id="country-select">
+            <option value="israel">ישראל</option>
+            <option value="neighborhood">מדינות בשכונה</option>
+            <option value="europe">אירופה</option>
+            <option value="usa">ארצות הברית</option>
         </select>
+        <div id="cities-container"></div>
         <button onclick="getWeather()">הצג מזג אוויר</button>
         <div id="weather-data"></div>
     </div>
