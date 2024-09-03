@@ -167,4 +167,38 @@ function getCityHebrewName(country, cityValue) {
     return cityData ? cityData.name : cityValue;
 }
 
-// ... שאר הפונקציות נשארות ללא שינוי ...
+function getWeatherIcon(weatherCode) {
+    if (weatherCode <= 3) {
+        return '<i class="fas fa-sun" style="color: #FFD700;"></i>';
+    } else if (weatherCode <= 48) {
+        return '<i class="fas fa-cloud-sun" style="color: #87CEEB;"></i>';
+    } else if (weatherCode <= 67) {
+        return '<i class="fas fa-cloud-rain" style="color: #4682B4;"></i>';
+    } else if (weatherCode <= 77) {
+        return '<i class="fas fa-snowflake" style="color: #FFFFFF;"></i>';
+    } else if (weatherCode <= 82) {
+        return '<i class="fas fa-cloud-showers-heavy" style="color: #1E90FF;"></i>';
+    } else {
+        return '<i class="fas fa-bolt" style="color: #FFD700;"></i>';
+    }
+}
+
+function getWeatherDescription(weatherCode) {
+    if (weatherCode <= 3) return 'בהיר';
+    if (weatherCode <= 48) return 'מעונן';
+    if (weatherCode <= 67) return 'גשום';
+    if (weatherCode <= 77) return 'שלג';
+    if (weatherCode <= 82) return 'ממטרים';
+    return 'סוער';
+}
+
+function getWindDirection(degree) {
+    if (degree > 337.5 || degree <= 22.5) return 'צפון';
+    if (degree > 22.5 && degree <= 67.5) return 'צפון-מזרח';
+    if (degree > 67.5 && degree <= 112.5) return 'מזרח';
+    if (degree > 112.5 && degree <= 157.5) return 'דרום-מזרח';
+    if (degree > 157.5 && degree <= 202.5) return 'דרום';
+    if (degree > 202.5 && degree <= 247.5) return 'דרום-מערב';
+    if (degree > 247.5 && degree <= 292.5) return 'מערב';
+    if (degree > 292.5 && degree <= 337.5) return 'צפון-מערב';
+}
